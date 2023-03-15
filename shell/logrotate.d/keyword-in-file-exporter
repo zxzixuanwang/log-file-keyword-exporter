@@ -1,0 +1,13 @@
+/var/log/keyword-in-file-exporter/*.log {
+    create 640 product product
+    daily
+    dateext
+    rotate 7
+    missingok
+    delaycompress
+    compress
+    sharedscripts
+    su product product
+    copytruncate
+    notifempty
+}

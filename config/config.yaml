@@ -1,0 +1,56 @@
+version: 
+app: 
+  name: keyword-in-file-exporter
+  cpuNumber: 2
+  debug: true
+  port: :6060
+
+
+info:
+  biz: test
+  instance: 127.0.0.1
+
+
+logFile: 
+  # minute
+  positionDir: /tmp/templog/s.position
+  flush: 1
+  save: 2
+  check: 1
+  ttl: 1
+  list:
+    - 
+      appName: test-app
+      rulerName: check-app-error
+      keyWords: 
+        - error
+      filePosition: /tmp/templog/*-1.log
+      buff: 1000
+    - 
+      appName: test-app2
+      keyWords: 
+        - error
+      filePosition: /tmp/templog/*-2.log
+      buff: 1000
+
+  
+tsdb: 
+  address: http://localhost:9090/api/v1/write
+
+  timeout: 60
+  userAgent: keyword-exporter
+  rateGen: 60
+  bucket: 1
+
+
+
+log: 
+  level: debug
+  filePosition: /tmp/temp1log/app.log
+
+script:
+  -
+   type:
+   filePosition:
+   
+   
