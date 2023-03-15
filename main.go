@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	_ "net/http/pprof"
 	"os"
@@ -33,7 +32,9 @@ func main() {
 	ip, err := tool.GetIP()
 	if err != nil {
 		level.Error(l).Log("get ip error", err)
+		panic(err)
 	}
+
 	conf.Ip = ip.String()
 
 	signalChan := make(chan os.Signal, 1)
@@ -41,8 +42,9 @@ func main() {
 		conf.AppConfig.Log.FilePosition,
 		conf.AppConfig.Log.Level))
 
-	fileDirs := make([]string, 0, 5)
+	fileDirs := make([]string, 0, len(conf.AppConfig.LogFile.List))
 	appNames := make([]string, 0, len(conf.AppConfig.LogFile.List))
+
 	for _, v := range conf.AppConfig.LogFile.List {
 		fileDirs = append(fileDirs, v.FilePosition)
 		check.Insert(check.KeyAppName(v.FilePosition), v.AppName)
@@ -170,8 +172,6 @@ func savePostionInFile(sp *savepostion.SavePos, kill bool) {
 	level.Debug(l).Log("saving", "position")
 	fis := make([]*savepostion.FIInput, 0, 20)
 	check.Range(func(k string, v any) {
-
-		fmt.Println("k", k, "v", v)
 		ta, ok := v.(*tail.Tail)
 
 		level.Debug(l).Log("range map", ta)
